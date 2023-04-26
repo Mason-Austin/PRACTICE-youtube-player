@@ -58,7 +58,27 @@ const addVideoModel = () =>{
         </div>
         <div class="modal-body">
 
-          <p>Wow</p>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="youtubeId" placeholder="YouTube Video ID" required>
+            <label for="floatingInput">YouTube Video ID</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="title" placeholder="Title" required>
+            <label for="floatingInput">Title</label>
+          </div>
+
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Open this select menu</option>
+            <option value="1">Critical Role</option>
+            <option value="2">Coding</option>
+            <option value="3">Cars</option>
+          </select>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+            <label class="form-check-label" for="inlineCheckbox1">Favorite</label>
+          </div>
 
         </div>
         <div class="modal-footer">
@@ -68,7 +88,58 @@ const addVideoModel = () =>{
       </div>
     </div>
   </div>`
-  renderToDom(addVideoContainer, domString)
+  renderToDom("addVideoContainer", domString)
 }
 
-addVideoModel();
+ const vidPlayer= () =>{
+  let domstring=`<iframe width="420" height="315"
+    src="https://www.youtube.com/embed/tgbNymZ7vqY">
+  </iframe>`
+  renderToDom("videoPlayer", domstring)
+ }
+
+const filterBtns = () => {
+  const domString = `
+  <button type="button" class="btn btn-primary">Criticle Role</button>
+  <button type="button" class="btn btn-primary">Codeing</button>
+  <button type="button" class="btn btn-primary">Cars</button>
+  <button type="button" class="btn btn-primary">Favorites</button>
+  <button type="button" class="btn btn-primary">Clear Filters</button>`
+  renderToDom("filterContainer", domString)
+}
+
+const videoCards= () =>{
+  let domString=``
+  data.forEach(video => {
+
+    domString+=`
+    <div class="card">
+      <div class="card-body">
+        <img src="https://i.ytimg.com/vi/HFTvaOjWk2c/maxresdefault.jpg" width="200px">
+        <div>
+          <h5>${video.title}</h5>
+          <h6>Category:${video.category}</h6>
+          <button>Watch Video</button>
+        </div>
+        <button>Delete</button>
+      </div>
+    </div>`
+
+    // videoId: 'jjydMpW47wk',
+    //   title: 'Inspo on JS',
+    //   category: 'javascript',
+    //   favorite: true,
+    
+  });
+  renderToDom("cardContainer",domString)
+
+}
+
+let startApp = () =>{
+  addVideoModel();
+  filterBtns();
+  videoCards();
+  vidPlayer();
+}
+
+startApp()
