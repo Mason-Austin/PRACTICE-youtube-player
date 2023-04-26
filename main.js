@@ -2,15 +2,15 @@ const data = [
     {
       videoId: '1Rs2ND1ryYc',
       title: 'Zero to Hero',
-      category: 'coding',
+      category: 'Coding',
       favorite: false,
     },
     {
       videoId: 'jjydMpW47wk',
       title: 'Inspo on JS',
-      category: 'coding',
-      favorite: true,
-    },
+      category: 'Coding',
+      favorite: true
+    }
 ];
 
 const renderToDom = (divID, htmlToRender) =>{
@@ -19,21 +19,24 @@ const renderToDom = (divID, htmlToRender) =>{
 }
 
 const addVideoModel = () =>{
-  console.log("first function works");
   const domString=`
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Add video
-  </button>
   
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="addForm">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Add video
+</button>
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add video</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      <form id="form">
+
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="youtubeId" placeholder="YouTube Video ID" required>
               <label for="floatingInput">YouTube Video ID</label>
@@ -52,18 +55,21 @@ const addVideoModel = () =>{
             </select>
 
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="">
+              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="true">
               <label class="form-check-label" for="inlineCheckbox1">Favorite</label>
             </div>
-            <footer></footer>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            </footer>
-          </form>
-        </div>
+            <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Understood</button>
       </div>
+            </form>
+          
+        
+      </div>
+      
     </div>
-  </div>`
+  </div>
+</div>`
   renderToDom("addVideoContainer", domString)
 }
 
@@ -90,7 +96,7 @@ const videoCards= (array) =>{
   array.forEach(video => {
 
     domString+=`
-    <div class="card ${video.favorite}">
+    <div class="card">
       <div class="card-body">
         <img src="https://i.ytimg.com/vi/HFTvaOjWk2c/maxresdefault.jpg" width="200px">
         <div>
@@ -122,6 +128,7 @@ const filter = (array, typeString) => {
   return typeArray
 }
 
+
 let startApp = () =>{
   addVideoModel();
   filterBtns();
@@ -130,12 +137,36 @@ let startApp = () =>{
 }
 startApp()
 
+const favFun = () =>{
+  if (document.querySelector(`input[id="inlineCheckbox1"]:checked`)) {
+    return true
+  } else {
+    return false
+  }
+}
+
+const createVideo = (e) => {
+  e.preventDefault();
+
+  const newVideoObj={
+      
+      videoId: document.querySelector("#youtubeId").value,
+      title: document.querySelector("#title").value,
+      category: document.querySelector("#categorySelector").value,
+      favorite: favFun()
+  }
+  console.log(newVideoObj);
+  data.push(newVideoObj);
+  videoCards(data);
+  form.reset();
+}
+
 const critRoleBtn = document.getElementById("roleBtn")
 const codeBtn = document.getElementById("codingBtn")
 const carBtn = document.getElementById("carsbtn")
 const favBtn = document.getElementById("favBtn")
 const clearBtn = document.getElementById("clearBtn")
-const mainForm = document.getElementById("addForm")
+const form = document.getElementById("form")
 
 critRoleBtn.addEventListener("click", () =>{
   const critRoleVideos=filter(data,"Critical Role")
@@ -143,12 +174,12 @@ critRoleBtn.addEventListener("click", () =>{
 } )
 
 codeBtn.addEventListener("click", () => {
-  const codingVideos=filter(data,"coding")
+  const codingVideos=filter(data,"Coding")
   videoCards(codingVideos)
 })
 
 carBtn.addEventListener("click", () => {
-  const carVideos=filter(data,"car")
+  const carVideos=filter(data,"Cars")
   videoCards(carVideos)
 })
 
@@ -166,13 +197,4 @@ favBtn.addEventListener("click", () => {
   videoCards(favArry)
 })
 
-mainForm.addEventListener("submit", () => {
-  console.log("functinwork")
-  data.push({
-    videoId : document.getElementById("youtubeId").value,
-    title: document.getElementById("title").value,
-    category: document.getElementById("categorySelector").value,
-    favorite:d
-  })
-  videoCards(data)
-})
+form.addEventListener("submit", createVideo);
