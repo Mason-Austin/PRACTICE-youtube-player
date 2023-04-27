@@ -104,7 +104,7 @@ const videoCards= (array) =>{
           <h6>Category:${video.category}</h6>
           <button id="watchBtn">Watch Video</button>
         </div>
-        <button>Delete</button>
+        <button id="delete--${video.videoId}">Delete</button>
       </div>
     </div>`
 
@@ -167,6 +167,7 @@ const carBtn = document.getElementById("carsbtn")
 const favBtn = document.getElementById("favBtn")
 const clearBtn = document.getElementById("clearBtn")
 const form = document.getElementById("form")
+const cardList = document.getElementById("cardContainer")
 
 critRoleBtn.addEventListener("click", () =>{
   const critRoleVideos=filter(data,"Critical Role")
@@ -198,3 +199,13 @@ favBtn.addEventListener("click", () => {
 })
 
 form.addEventListener("submit", createVideo);
+
+cardList.addEventListener("click", (e) =>{
+  if (e.target.id.includes("delete")) {
+    console.log("wow");
+    const[,id]=e.target.id.split("--")
+    const index=data.findIndex(video=>video.videoId===(id))
+    data.splice(index,1)
+    videoCards(data)
+  }
+})
